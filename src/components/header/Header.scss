@@ -1,0 +1,75 @@
+@import "../../vendors/mixins";
+@import "../../vendors/variables";
+
+.header {
+  @include flexBet;
+  padding: 30px 0px;
+  border-bottom: 1px solid $lightgray;
+
+  .icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    span {
+      width: 24px;
+      height: 24px;
+      @include flexCenter;
+      background-color: $yellow;
+      border-radius: 10px;
+      color: $white;
+    }
+  }
+  .zoom {
+    @include flexCenter;
+    gap: 5px;
+    .view {
+      background-color: $blue;
+      padding: 10px;
+      color: $white;
+      cursor: pointer;
+    }
+    .center {
+      padding: 11px;
+      background-color: $white;
+      border: none;
+      cursor: pointer;
+      color: $lightgray;
+    }
+    .zoom-btn {
+      @include flexCenter;
+      gap: 2px;
+      button {
+        padding: 11px 13px;
+        border: none;
+        background-color: $white;
+        cursor: pointer;
+        font-weight: bold;
+        color: $lightgray;
+      }
+      .percent {
+        position: relative;
+        ul {
+          position: absolute;
+          top: 40px;
+          left: -10px;
+          list-style: none;
+          @include flexCenter;
+          flex-direction: column;
+          background-color: $white;
+          padding: 10px 12px;
+          display: none;
+          li {
+            cursor: pointer;
+            color: $lightgray;
+            margin-bottom: 8px;
+          }
+        }
+        &:hover {
+          ul {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
