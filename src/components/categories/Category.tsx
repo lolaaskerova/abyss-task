@@ -121,9 +121,7 @@ const Category = () => {
     );
   }
 
-  // add again sub category
   
-
   return (
     <div ref={categoryRef} className="categories">
       <ul ref={treeRef} className="tree">
