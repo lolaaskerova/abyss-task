@@ -5,7 +5,8 @@
   @include flexBet;
   padding: 30px 0px;
   border-bottom: 1px solid $lightgray;
-
+  position: relative;
+  z-index: 999;
   .icon {
     display: flex;
     align-items: center;
