@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useRef } from "react";
 import "./App.scss";
 import Category from "./components/categories/Category";
 import Header from "./components/header/Header";
 
 function App() {
-  const [centered, setCentered] = useState<boolean>(false);
+  const centerRef = useRef<boolean>(false);
   function center() {
-    setCentered(true);
+    centerRef.current = true;
     window.location.reload();
   }
   return (
