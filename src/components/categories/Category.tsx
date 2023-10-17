@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import "./Category.scss";
+
 const Category = () => {
   const categoryRef = useRef<HTMLDivElement>(null);
   const treeRef = useRef<HTMLUListElement>(null);

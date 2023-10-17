@@ -1,7 +1,11 @@
 import React from "react";
 import "./Header.scss";
 
-const Header = () => {
+type IProps = {
+  center: () => void;
+};
+
+const Header: React.FC<IProps> = ({ center }) => {
   return (
     <div className="container header">
       <div className="icon">
@@ -10,7 +14,11 @@ const Header = () => {
       </div>
       <div className="zoom">
         <span className="view">List View</span>
-        <button className="center" title="Go To Center">
+        <button
+          onClick={() => center()}
+          className="center"
+          title="Go To Center"
+        >
           ➤
         </button>
         <div className="zoom-btn">
