@@ -1,7 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./Category.scss";
+import { CategoryInputs, SubCategoryInputs } from "../../types/Type";
 
 const Category = () => {
+  //draggable component functions
   const categoryRef = useRef<HTMLDivElement>(null);
   const treeRef = useRef<HTMLUListElement>(null);
   const isClicked = useRef<boolean>(false);
@@ -63,79 +65,106 @@ const Category = () => {
     return cleanUp;
   }, []);
 
+  // adding new category function
+
+  const [inputValue, setInputValue] = useState<string>("");
+  const [categories, setCategories] = useState<CategoryInputs[]>([]);
+  const [categoriesItem, setCategoriesItem] = useState<SubCategoryInputs[]>([]);
+  const [addCategory, setAddCategory] = useState<boolean>(false);
+  const [subCategory, setSubCategory] = useState<boolean>(false);
+
+  useEffect(() => {
+    const storedCategoriesString = localStorage.getItem("categories");
+    const storedCategoriesItemString = localStorage.getItem("categoriesItem");
+
+    const initialCategories: CategoryInputs[] = JSON.parse(
+      storedCategoriesString || "[]"
+    );
+
+    const initialCategoriesItem: SubCategoryInputs[] = JSON.parse(
+      storedCategoriesItemString || "[]"
+    );
+
+    setCategories(initialCategories);
+    setCategoriesItem(initialCategoriesItem);
+  }, []); // Load initial categories from localStorage
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setInputValue(e.target.value);
+  }
+
+  function addCategoryClick() {
+    setAddCategory(true);
+    const newCategory: CategoryInputs = {
+      title: inputValue,
+      id: categories.length + 1,
+    };
+    setCategories([...categories, newCategory]);
+    localStorage.setItem(
+      "categories",
+      JSON.stringify([...categories, newCategory])
+    );
+    setInputValue("");
+    setSubCategory(false);
+  }
+
+  function addSubCategoryClick() {
+    setSubCategory(true);
+    const newSubCategory: SubCategoryInputs = {
+      title: inputValue,
+      id: categoriesItem.length + 1,
+    };
+    setCategoriesItem([...categoriesItem, newSubCategory]);
+    localStorage.setItem(
+      "categoriesItem",
+      JSON.stringify([...categoriesItem, newSubCategory])
+    );
+  }
+
+  // add again sub category
+  
+
   return (
     <div ref={categoryRef} className="categories">
       <ul ref={treeRef} className="tree">
         <li>
           <div className="category">
             <span>Categories</span>
-            <button className="add">+</button>
+            <button onClick={() => addCategoryClick()} className="add">
+              +
+            </button>
           </div>
           <ul>
-            <li>
-              <div className="category-input">
-                <input type="text" placeholder="Category" />
-                <button id="add">√</button> <button id="edit">✎</button>{" "}
-                <button id="delete">×</button>
-              </div>
-              <ul>
+            {addCategory &&
+              (subCategory ? (
+                categoriesItem.map((item) => (
+                  <li key={item.id}>
+                    <div className="category-input">
+                      <div className="item">{item.title}</div>
+                      <button onClick={() => addSubCategoryClick()} id="add">
+                        +
+                      </button>{" "}
+                      <button id="edit">✎</button>{" "}
+                      <button id="delete">×</button>
+                    </div>
+                  </li>
+                ))
+              ) : (
                 <li>
                   <div className="category-input">
-                    <input type="text" placeholder="Category" />{" "}
-                    <button id="add">√</button> <button id="edit">✎</button>{" "}
-                    <button id="delete">×</button>
-                  </div>
-                  <ul>
-                    <li>
-                      <div className="category-input">
-                        <input type="text" placeholder="Category" />{" "}
-                        <button id="add">√</button> <button id="edit">✎</button>{" "}
-                        <button id="delete">×</button>
-                      </div>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <div className="category-input">
-                    <input type="text" placeholder="Category" />{" "}
-                    <button id="add">√</button> <button id="edit">✎</button>{" "}
-                    <button id="delete">×</button>
+                    <input
+                      type="text"
+                      placeholder="Category"
+                      value={inputValue}
+                      onChange={handleChange}
+                    />
+                    <button onClick={() => addSubCategoryClick()} id="add">
+                      √
+                    </button>{" "}
+                    <button id="edit">✎</button> <button id="delete">×</button>
                   </div>
                 </li>
-              </ul>
-            </li>
-            <li>
-              <div className="category-input">
-                <input type="text" placeholder="Category" />
-                <button id="add">√</button> <button id="edit">✎</button>{" "}
-                <button id="delete">×</button>
-              </div>
-              <ul>
-                <li>
-                  <div className="category-input">
-                    <input type="text" placeholder="Category" />{" "}
-                    <button id="add">√</button> <button id="edit">✎</button>{" "}
-                    <button id="delete">×</button>
-                  </div>
-                  <ul>
-                    <li>
-                      <div className="category-input">
-                        <input type="text" placeholder="Category" />{" "}
-                        <button id="add">√</button> <button id="edit">✎</button>{" "}
-                        <button id="delete">×</button>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="category-input">
-                        <input type="text" placeholder="Category" />{" "}
-                        <button id="add">√</button> <button id="edit">✎</button>{" "}
-                        <button id="delete">×</button>
-                      </div>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
+              ))}
           </ul>
         </li>
       </ul>

@@ -78,6 +78,7 @@
           padding: 3px 6px;
           border-radius: 50%;
           color: $white;
+          cursor: pointer;
           @include flexCenter;
         }
         #add {
@@ -97,11 +98,12 @@
       &::after {
         content: "";
         position: absolute;
-        top: 17%;
-        left: 48%;
+        top: 37%;
+        left: 47%;
         border-left: 1px solid $lightgray;
         width: 10px;
         height: 20px;
+        display: none;
       }
       span {
         padding: 10px;
@@ -117,5 +119,11 @@
         cursor: pointer;
       }
     }
+  }
+
+  .item {
+    padding: 5px 18px;
+    background-color: $orange;
+    color: $white;
   }
 }
