@@ -5,6 +5,7 @@
   @include flexCenter;
   padding-top: 50px;
   position: relative;
+  zoom: 100%;
   .tree {
     @include flexCenter;
     cursor: all-scroll;

@@ -3,9 +3,19 @@ import "./Header.scss";
 
 type IProps = {
   center: () => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
+  zoom: number;
+  updateZoom: (newZoom: number) => void;
 };
 
-const Header: React.FC<IProps> = ({ center }) => {
+const Header: React.FC<IProps> = ({
+  center,
+  zoomIn,
+  zoomOut,
+  zoom,
+  updateZoom,
+}) => {
   return (
     <div className="container header">
       <div className="icon">
@@ -22,24 +32,31 @@ const Header: React.FC<IProps> = ({ center }) => {
           ➤
         </button>
         <div className="zoom-btn">
-          <button className="zoom-out">−</button>
+          <button onClick={() => zoomOut()} className="zoom-out">
+            −
+          </button>
           <div className="percent">
-            <button className="full">100%</button>
+            <button className="full">{zoom}%</button>
             <ul>
-              <li>25%</li>
-              <li>30%</li>
-              <li>40%</li>
-              <li>50%</li>
-              <li>60%</li>
-              <li>70%</li>
-              <li>80%</li>
-              <li>90%</li>
-              <li>100%</li>
-              <li>125%</li>
-              <li>150%</li>
+              <li onClick={() => updateZoom(20)}>20%</li>
+              <li onClick={() => updateZoom(30)}>30%</li>
+              <li onClick={() => updateZoom(40)}>40%</li>
+              <li onClick={() => updateZoom(50)}>50%</li>
+              <li onClick={() => updateZoom(60)}>60%</li>
+              <li onClick={() => updateZoom(70)}>70%</li>
+              <li onClick={() => updateZoom(80)}>80%</li>
+              <li onClick={() => updateZoom(90)}>90%</li>
+              <li onClick={() => updateZoom(100)}>100%</li>
+              <li onClick={() => updateZoom(110)}>110%</li>
+              <li onClick={() => updateZoom(120)}>120%</li>
+              <li onClick={() => updateZoom(130)}>130%</li>
+              <li onClick={() => updateZoom(140)}>140%</li>
+              <li onClick={() => updateZoom(150)}>150%</li>
             </ul>
           </div>
-          <button className="zoom-in">+</button>
+          <button onClick={() => zoomIn()} className="zoom-in">
+            +
+          </button>
         </div>
       </div>
     </div>
