@@ -150,29 +150,24 @@ const Category = () => {
   }
 
   function updateElement(id: number) {
-    // Kategori veya alt kategorinin bulunduğu diziyi belirle
     const isCategory = categories.some((e) => e.id === id);
     const targetArray = isCategory ? categories : categoriesItem;
 
-    // Güncellenmiş diziyi oluştur
     const updatedArray = targetArray.map((item) =>
       item.id === id ? { ...item, title: updateInput } : item
     );
 
-    // State'i güncelle
     if (isCategory) {
       setCategories(updatedArray as CategoryInputs[]);
     } else {
       setCategoriesItem(updatedArray as SubCategoryInputs[]);
     }
 
-    // LocalStorage'ı güncelle
     localStorage.setItem(
       isCategory ? "categories" : "categoriesItem",
       JSON.stringify(updatedArray)
     );
 
-    // Güncelleme işlemini sonlandır
     setUpdateElementId(null);
     setUpdateInput("");
   }
