@@ -72,6 +72,8 @@ const Category = () => {
   const [categoriesItem, setCategoriesItem] = useState<SubCategoryInputs[]>([]);
   const [addCategory, setAddCategory] = useState<boolean>(false);
   const [subCategory, setSubCategory] = useState<boolean>(false);
+  const [updateElementId, setUpdateElementId] = useState<number | null>(null);
+  const [updateInput, setUpdateInput] = useState<string>("");
 
   useEffect(() => {
     const storedCategoriesString = localStorage.getItem("categories");
@@ -97,7 +99,7 @@ const Category = () => {
     setAddCategory(true);
     const newCategory: CategoryInputs = {
       title: inputValue,
-      id: categories.length + 1,
+      id: +categories.length + 1 + 100,
     };
     setCategories([...categories, newCategory]);
     localStorage.setItem(
@@ -121,7 +123,60 @@ const Category = () => {
     );
   }
 
-  
+  function deleteCategory(id: number) {
+    const storedCategoriesString = localStorage.getItem("categories");
+    const storedCategoriesItemString = localStorage.getItem("categoriesItem");
+
+    const storedCategories = storedCategoriesString
+      ? JSON.parse(storedCategoriesString)
+      : [];
+    const storedCategoriesItem = storedCategoriesItemString
+      ? JSON.parse(storedCategoriesItemString)
+      : [];
+
+    const updatedCategoriesItem = storedCategoriesItem.filter(
+      (e: any) => e.id !== id
+    );
+    setCategoriesItem(updatedCategoriesItem);
+
+    const updatedCategories = storedCategories.filter((e: any) => e.id !== id);
+    setCategories(updatedCategories);
+
+    localStorage.setItem("categories", JSON.stringify(updatedCategories));
+    localStorage.setItem(
+      "categoriesItem",
+      JSON.stringify(updatedCategoriesItem)
+    );
+  }
+
+  function updateElement(id: number) {
+    // Kategori veya alt kategorinin bulunduğu diziyi belirle
+    const isCategory = categories.some((e) => e.id === id);
+    const targetArray = isCategory ? categories : categoriesItem;
+
+    // Güncellenmiş diziyi oluştur
+    const updatedArray = targetArray.map((item) =>
+      item.id === id ? { ...item, title: updateInput } : item
+    );
+
+    // State'i güncelle
+    if (isCategory) {
+      setCategories(updatedArray as CategoryInputs[]);
+    } else {
+      setCategoriesItem(updatedArray as SubCategoryInputs[]);
+    }
+
+    // LocalStorage'ı güncelle
+    localStorage.setItem(
+      isCategory ? "categories" : "categoriesItem",
+      JSON.stringify(updatedArray)
+    );
+
+    // Güncelleme işlemini sonlandır
+    setUpdateElementId(null);
+    setUpdateInput("");
+  }
+
   return (
     <div ref={categoryRef} className="categories">
       <ul ref={treeRef} className="tree">
@@ -138,12 +193,45 @@ const Category = () => {
                 categoriesItem.map((item) => (
                   <li key={item.id}>
                     <div className="category-input">
-                      <div className="item">{item.title}</div>
-                      <button onClick={() => addSubCategoryClick()} id="add">
-                        +
-                      </button>{" "}
-                      <button id="edit">✎</button>{" "}
-                      <button id="delete">×</button>
+                      {updateElementId === item.id ? (
+                        <input
+                          onKeyDown={(e) =>
+                            e.key === "Enter" && updateElement(item.id)
+                          }
+                          onChange={(e) => setUpdateInput(e.target.value)}
+                          className="item"
+                          type="text"
+                          style={{ color: "red" }}
+                        />
+                      ) : (
+                        <div className="item">{item.title}</div>
+                      )}
+                      {updateElementId === item.id ? (
+                        <>
+                          <button
+                            onClick={() => updateElement(item.id)}
+                            id="add"
+                          >
+                            √
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          {" "}
+                          <button
+                            id="edit"
+                            onClick={() => setUpdateElementId(item.id)}
+                          >
+                            ✎
+                          </button>{" "}
+                          <button
+                            id="delete"
+                            onClick={() => deleteCategory(item.id)}
+                          >
+                            ×
+                          </button>
+                        </>
+                      )}
                     </div>
                   </li>
                 ))
